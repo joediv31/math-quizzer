@@ -55,8 +55,8 @@
   
   socket.on('updatePlayers', function(data){
     if(username != ""){
-  	  $("#welcome").hide();
-  	  $("#leaderBoard").show();
+      $("#welcome").hide();
+      $("#leaderBoard").show();
       $("#players").html("");
       $("#players").append("<tr><td><strong>#</strong></td><td><strong>Username</strong></td><td><strong>Points</strong></td></tr>");
       for(var i=0; i<data[0].length; i++){
