@@ -1,0 +1,98 @@
+#newGameButton{
+  display: none;
+}
+
+#questionAnswerArea{
+  display: none;
+}
+
+#answeredArea{
+  display: none;
+}
+
+#restartButton{
+  display: none;
+}
+
+#leaderBoard{
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 55px;
+}
+
+#gameOverMessage{
+  display: none;
+  margin-top: 20px;
+}
+
+html, body{
+  height: 100%;
+}
+
+#wrap{
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -50px;
+}
+
+#push, #footer{
+  height: 50px;
+}
+
+#footer p{
+  padding-top: 15px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+#footer{
+  background-color: #d9edf7;
+}
+
+#addUserErrorMsg{
+  display: none;
+}
+
+#errors{
+  display: none;
+}
+
+.jumbotron {
+
+  padding: 40px 0 0 0;
+  color: #333;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(255,255,255,.4), 0 0 30px rgba(255,255,255,.075);
+}
+.jumbotron h1 {
+  font-size: 74px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+.jumbotron p {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.25;
+  margin-bottom: 30px;
+}
+
+.jumbotron input{
+  padding: 10px 14px !important;
+  font-size: 24px !important;
+  width: auto;
+  line-height: 26px !important;
+}
+
+.jumbotron button{
+  padding: 10px 14px !important;
+  font-size: 24px !important;
+}
+
+.jumbotron-gone{
+  display: none !important;
+}
+

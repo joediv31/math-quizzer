@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Math Quizzer - Test Your Mental Math</title>
+<meta charset="UTF-8"/>
+
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+ // For testing mode on local server
+ // var socket = io.connect('http://localhost:80');
+ 
+  var socket = io.connect('http://mathquizzer.nodejitsu.com:80');
+  var username = "";
+  var userIsNew = true;
+  
+  function checkGameStatus(gameStarted){
+    if(gameStarted && userIsNew){
+      socket.emit('getCurrentQuestion');
+      userIsNew = false;
+      $("#restartButton").show();
+    }
+    else if(!gameStarted){
+      $("#restartButton").hide();
+      $("#newGameButton").fadeIn();
+    }
+    else{
+      $("#restartButton").fadeIn();
+    }  
+  }
+  
+  function reset(){
+    $("#questionAnswerArea").hide();
+    $("#answeredArea").hide();
+    $("#leaderBoard").hide();
+    $("#restartButton").hide();
+    $("#newGameButton").hide();
+    $("#welcome").show();
+    $("input#username").val("");
+    username = "";
+    userIsNew = true;
+  }
+
+  socket.on('connect', function(){
+    reset();
+  });
+  
+  socket.on('authError', function(data){
+    reset();
+  });
+  
+  socket.on('updatePlayers', function(data){
+    if(username != ""){
+  	  $("#welcome").hide();
+  	  $("#leaderBoard").show();
+      $("#players").html("");
+      $("#players").append("<tr><td><strong>#</strong></td><td><strong>Username</strong></td><td><strong>Points</strong></td></tr>");
+      for(var i=0; i<data[0].length; i++){
+        var j = i+1;
+        $("#players").append('<tr><td>'+j+'</td><td>'+data[0][i].name+'</td><td>'+data[0][i].points+'</td></tr>');
+      }
+      checkGameStatus(data[1]);
+    }
+  });
+
+  socket.on('newQuestion', function(data){
+    $("button#submitAnswer").removeAttr("disabled");
+    if(username != ""){
+      userIsNew = false;
+      $("#newGameButton").hide();
+      $("#gameOverMessage").hide();
+      $("#questionAnswerArea").hide();
+      $("#answeredArea").hide();
+      $("#questionArea").html("");
+      $("input#answer").val("");
+      $("h1#questionNumber").html("Question #"+data[1]);
+      var questionStr = "<p>What is "+data[0]['arg1']+" "+data[0]['operator']+" "+data[0]['arg2']+"?</p>";
+      $("#questionArea").html(questionStr);
+      $("#questionAnswerArea").fadeIn('fast');
+    }
+  });
+  
+  socket.on('submitError', function(data){
+    $("#errors").html("<strong>"+data+"</strong>");
+    $("#errors").show();
+  });
+  
+  socket.on('answered', function(data){
+    $("button#submitAnswer").attr("disabled", 'disabled');
+    $("#errors").hide();
+    if(username != ""){
+      var answeredStr;
+      if(data == username){
+        answeredStr = "<strong>Congrats!  You answered correctly!</strong>";
+        $("#answeredArea").attr('class', 'alert alert-success');
+      }
+      else{
+        answeredStr = "<strong>Sorry! "+data+" answered the question correctly.</strong>";
+        $("#answeredArea").attr('class', 'alert alert-error');
+      }
+      $("#answeredArea").html(answeredStr);
+      
+      $("#answeredArea").fadeIn('fast').delay(2000).fadeOut('fast', function(){
+        socket.emit('getCurrentQuestion');
+      });
+    }  
+  });
+  
+  socket.on('gameOver', function(data){
+    if(username != ""){
+      $("#questionAnswerArea").hide();
+      var gameOverMsg = "";
+      if(data.key == username){
+        gameOverMsg = "<strong>Game Over!  Congratulations "+username+", you are the winner with "+data.val+" points!</strong>";
+        $("#gameOverMessage").attr("class", "alert alert-success");
+      }
+      else{
+        gameOverMsg = "<strong>Game Over, you lost! The winner is "+data.key+" with "+data.val+" points!</strong>";
+        $("#gameOverMessage").attr("class", "alert alert-error");
+      }
+      $("#gameOverMessage").html(gameOverMsg);
+      $("#gameOverMessage").fadeIn('fast');
+    }
+  });
+
+  socket.on('addUserError', function(data){
+    if(data == "empty")
+      $("#addUserErrorMsg").html("<strong>Please Enter A Username.</strong>");
+    else if(data == "taken")
+      $("#addUserErrorMsg").html("<strong>Username is already in use.  Please choose another.</strong>");
+    $("#addUserErrorMsg").fadeIn('fast');  
+  });
+
+  $(document).ready(function(){
+    
+    $("a#newGameButton").click(function(){
+      socket.emit('newGame');
+    });
+  
+    $("button#submitAnswer").click(function(){
+      $("p#errors").html("");
+      socket.emit('submitAnswer', $("input#answer").val());
+    });
+    
+    $("input#answer").keypress(function(e){
+      $("#errors").html("");
+      $("#errors").hide();
+      if(e.which == 13){
+        socket.emit('submitAnswer', $("input#answer").val());
+      }
+    });
+    
+    $("button#goButton").click(function(){
+      socket.emit('addUser', username = $("input#username").val());
+      $("input#username").blur();
+    });
+    
+    $("input#username").keypress(function(e){
+      $("#addUserErrorMsg").hide();
+      if(e.which == 13){
+        socket.emit('addUser', username = $("input#username").val());
+        $("input#username").blur();
+      }
+    });
+    
+    $("a#restartButton").click(function(){
+      socket.emit('newGame');
+    });
+  
+  });
+  
+</script>
+
+</head>
+<body>
+  <div id="wrap">
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#"><strong>Math Quizzer</strong></a>
+          <a id="restartButton" class="btn pull-right">Restart Game</a>
+          <a id="newGameButton" class="btn btn-success pull-right">New Game</a>
+	    </div>
+      </div>
+    </div>
+  
+    <div class="container masthead">
+      <div id="welcome" class="jumbotron" style="padding-bottom: 0px;">
+	    <h1>Welcome to Math Quizzer!</h1>
+	    <p class="lead">Math Quizzer is a real-time math trivia game built using Nodejs, Socket.io, and Bootstrap.  The first user to reach 10 points wins.  To get started enter a username below.</p>
+  	    <div class="input-append">
+	      <input class="span2" id="username" type="text" placeholder="Enter a username…"/>
+	      <button id="goButton" class="btn btn-success" type="button">Go!</button>
+	    </div>
+	    <div id="addUserErrorMsg" class="alert alert-error"></div>
+	    
+	  </div>
+    
+      <div id="gameOverMessage" class="alert alert-info"></div>
+    
+      <div id="questionAnswerArea" class="jumbotron">
+        <h1 id="questionNumber"></h1>
+        <div id="questionArea"></div>
+        <div id="answerArea">
+          <div class="input-append">
+	        <input class="span2" id="answer" type="text"/>
+	        <button id="submitAnswer" class="btn btn-success" type="button">Submit</button>
+	      </div>
+  
+          <div id="errors" class="alert alert-error"></div>
+          <div id="answeredArea"></div>
+        </div>
+      </div>
+
+      <div id="leaderBoard">
+        <p><strong>Leaderboard:</strong></p>
+        <table id="players" class="table table-striped">  
+        </table>
+      </div>
+    
+    </div>
+    <div id="push"></div>
+  </div>
+  
+  <div id="footer">
+    <div class="container">
+      <p>Created by Joseph DiVita.  View the <a href="github.com">Git Hub Repo</a> for this project.</p>
+    </div>
+  </div>
+</body>
+</html>
