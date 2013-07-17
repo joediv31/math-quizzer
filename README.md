@@ -1,4 +1,4 @@
-Math Quizzer  [![Nodejitsu Deploy Status Badges](https://webhooks.nodejitsu.com/joediv31/math-quizzer.png)](https://webops.nodejitsu.com#joediv31/mathquizzer) 
+Math Quizzer  [![Nodejitsu Deploy Status Badges](https://webhooks.nodejitsu.com/joediv31/mathquizzer.png)](https://webops.nodejitsu.com#joediv31/mathquizzer) 
 ====
 
 This repo contains the files for a real-time mental math quizzer built with [Node](http://nodejs.org/), [Socket.io](http://socket.io/), & [Bootstrap](http://twitter.github.io/bootstrap/).
