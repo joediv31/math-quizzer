@@ -184,51 +184,52 @@
           <a class="brand" href="#"><strong>Math Quizzer</strong></a>
           <a id="restartButton" class="btn pull-right">Restart Game</a>
           <a id="newGameButton" class="btn btn-success pull-right">New Game</a>
-	    </div>
+	      </div>
       </div>
     </div>
   
     <div class="container masthead">
       <div id="welcome" class="jumbotron" style="padding-bottom: 0px;">
-	    <h1>Welcome to Math Quizzer!</h1>
-	    <p class="lead">Math Quizzer is a real-time math trivia game built using Nodejs, Socket.io, and Bootstrap.  The first user to reach 10 points wins.  To get started enter a username below.</p>
+	      <h1>Welcome to Math Quizzer!</h1>
+	      <p class="lead">Math Quizzer is a real-time math trivia game built using Nodejs, Socket.io, and Bootstrap.  The first user to reach 10 points wins.  To get started enter a username below.</p>
   	    <div class="input-append">
-	      <input class="span2" id="username" type="text" placeholder="Enter a username…"/>
-	      <button id="goButton" class="btn btn-success" type="button">Go!</button>
+	        <input class="span2" id="username" type="text" placeholder="Enter a username…"/>
+	        <button id="goButton" class="btn btn-success" type="button">Go!</button>
+	      </div>
+	      <div id="addUserErrorMsg" class="alert alert-error"></div>
 	    </div>
-	    <div id="addUserErrorMsg" class="alert alert-error"></div>
-	    
 	  </div>
     
+    <div class="container">
       <div id="gameOverMessage" class="alert alert-info"></div>
+    </div>
     
-      <div id="questionAnswerArea" class="jumbotron">
-        <h1 id="questionNumber"></h1>
-        <div id="questionArea"></div>
-        <div id="answerArea">
-          <div class="input-append">
-	        <input class="span2" id="answer" type="text"/>
+    <div id="questionAnswerArea" class="jumbotron">
+      <h1 id="questionNumber"></h1>
+      <div id="questionArea"></div>
+      <div id="answerArea" class="container">
+        <div class="input-append">
+          <input class="span2" id="answer" type="text"/>
 	        <button id="submitAnswer" class="btn btn-success" type="button">Submit</button>
 	      </div>
-  
-          <div id="errors" class="alert alert-error"></div>
-          <div id="answeredArea"></div>
-        </div>
+        <div id="errors" class="alert alert-error"></div>
+        <div id="answeredArea"></div>
       </div>
-
-      <div id="leaderBoard">
-        <p><strong>Leaderboard:</strong></p>
-        <table id="players" class="table table-striped">  
-        </table>
-      </div>
-    
     </div>
+
+    <div id="leaderBoard" class="container"> 
+      <p><strong>Leaderboard:</strong></p>
+      <table id="players" class="table table-striped">  
+      </table>
+    </div>
+   
     <div id="push"></div>
+     
   </div>
   
   <div id="footer">
     <div class="container">
-      <p>Created by Joseph DiVita.  View the <a href="github.com">Git Hub Repo</a> for this project.</p>
+      <p>Created by Joseph DiVita.  View the <a href="https://github.com/joediv31/math-quizzer" target="_blank">Git Hub Repo</a> for this project.</p>
     </div>
   </div>
 </body>
