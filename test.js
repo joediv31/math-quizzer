@@ -8,11 +8,11 @@ var options = {
   'force new connection': true
 };
 
-var username1 = "Joe";
-var username2 = "Frank";
-var username3 = "";
-var username4 = "Joe";
-var username5 = "Steve";
+var username1 = "Joe",
+    username2 = "Frank",
+    username3 = "",
+    username4 = "Joe",
+    username5 = "Steve";
 
 describe("Math game server", function(){
   
@@ -290,52 +290,51 @@ describe("Math game server", function(){
           }
         });
         client3.on('answered', function(data3){
-		      numAttempts++;
-		      client2.emit('getCurrentQuestion');
-		      client3.emit('getCurrentQuestion');
-		    });
+          numAttempts++;
+          client2.emit('getCurrentQuestion');
+          client3.emit('getCurrentQuestion');
+        });
 		    
-		    client3.on('newQuestion', function(data3){
-			    var arg1 = data3[0]['arg1'];
-		      var operator = data3[0]['operator'];
-		      var arg2 = data3[0]['arg2'];
+        client3.on('newQuestion', function(data3){
+          var arg1 = data3[0]['arg1'];
+          var operator = data3[0]['operator'];
+          var arg2 = data3[0]['arg2'];
 		      
-		      var answer;
+          var answer;
 		      
-		      if(operator === "+")
-		        answer = arg1 + arg2;
-		      else if(operator === "x")
-		        answer = arg1 * arg2;
-		      else if(operator === "-")
-		        answer = arg1 - arg2;
-		      else if(operator === "\/")
-		        answer = Math.round(arg1/arg2);
+          if(operator === "+")
+            answer = arg1 + arg2;
+          else if(operator === "x")
+            answer = arg1 * arg2;
+          else if(operator === "-")
+            answer = arg1 - arg2;
+          else if(operator === "\/")
+            answer = Math.round(arg1/arg2);
 		      
-		      if(numAttempts == 3)
-		        client3.emit('submitAnswer', answer);
-		    });
+          if(numAttempts == 3)
+            client3.emit('submitAnswer', answer);
+        });
       });
       
       client2.on('newQuestion', function(data3){
-	      var arg1 = data3[0]['arg1'];
-	      var operator = data3[0]['operator'];
-	      var arg2 = data3[0]['arg2'];
+        var arg1 = data3[0]['arg1'];
+        var operator = data3[0]['operator'];
+        var arg2 = data3[0]['arg2'];
 	      
-	      var answer;
+        var answer;
 	      
-	      if(operator === "+")
-	        answer = arg1 + arg2;
-	      else if(operator === "x")
-	        answer = arg1 * arg2;
-	      else if(operator === "-")
-	        answer = arg1 - arg2;
-	      else if(operator === "\/")
-	        answer = Math.round(arg1/arg2);
+        if(operator === "+")
+          answer = arg1 + arg2;
+        else if(operator === "x")
+          answer = arg1 * arg2;
+        else if(operator === "-")
+          answer = arg1 - arg2;
+        else if(operator === "\/")
+          answer = Math.round(arg1/arg2);
 	      
-	      if(numAttempts <3)
-	        client2.emit('submitAnswer', answer);
-	        
-	    });
+        if(numAttempts <3)
+          client2.emit('submitAnswer', answer);        
+      });
     });
   });
   
@@ -360,8 +359,7 @@ describe("Math game server", function(){
       });
       
       client2.on('newQuestion', function(data2){
-  		  if(numAttempts == 1){
-  		  
+        if(numAttempts == 1){		  
           //index of question should now be 2
           assert.equal(2, data2[1]);
           //attempts to start a new game
@@ -375,9 +373,9 @@ describe("Math game server", function(){
         assert.equal('Must choose a user name', msg);
         
         if(numAttempts == 1){
- 					numAttempts++;
+          numAttempts++;
  					
- 					//create un authed user client3 
+          //create un authed user client3 
           var client3 = io.connect(socketURL, options);
           
           client3.on('connect', function(data3){
@@ -424,12 +422,12 @@ describe("Math game server", function(){
         //index of question should be 1
         assert.equal(1, data[1]);
         client1.emit('submitAnswer', answer);
-    	}
-    	else if(numAttempts == 1){
-    	  //Will never fire since client2 is not authed to start new games (or reset them), which it tries when numAttempts = 1.
-    	  //If it does fire, the assertion fails on purpose
-    	  assert.equal(0,1);
-    	}
+      }
+      else if(numAttempts == 1){
+        //Will never fire since client2 is not authed to start new games (or reset them), which it tries when numAttempts = 1.
+        //If it does fire, the assertion fails on purpose
+        assert.equal(0,1);
+      }
     });
     
     client1.on('answered', function(data){
@@ -439,7 +437,5 @@ describe("Math game server", function(){
         assert.equal(0,1);
       }
     });
-    
   });
-  
 });
