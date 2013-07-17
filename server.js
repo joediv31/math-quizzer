@@ -70,6 +70,13 @@ io.sockets.on('connection', function(socket){
     delete users[socket.username];
     var myData = new Array();
     updatePlayers();
+    var playerCount = 0;
+    for(user in users)
+      playerCount++;
+    if(playerCount == 0){
+      gameStarted = false;
+      questionCount = 1;  
+    }
   });
   
   //New Game Request
