@@ -23,7 +23,7 @@ The app will then be found at 127.0.0.1:80
 Testing
 ----
 
-Unit tests are located in the test.js file and are run using the Node module [Mocha](http://visionmedia.github.io/mocha/) and also require the socket.io-client module (to test client connections).
+Unit tests are located in the test.js file and are run using the Node module [Mocha](http://mochajs.org/) and also require the socket.io-client module (to test client connections).
 
 To install these type (using the npm):
 
